@@ -155,12 +155,12 @@ into a profit-center.<span class="text-emerald-600 font-bold text-lg"> AIgnment<
                 <div class="mt-3 text-center sm:mt-5">
                   <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">Procedure recorded successfully</DialogTitle>
                   <div class="mt-2">
-                    <p class="text-sm text-gray-500">We have recorded actions for your procedure <strong>"audit company website"</strong>.</p>
+                    <p class="text-sm text-gray-500">We have recorded actions for your procedure <strong>"Audit company website"</strong>.</p>
                   </div>
                 </div>
               </div>
               <div class="mt-5 sm:mt-6">
-                <a href="https://docs.google.com/document/d/18wjxNuPdE9Y2V-VMx-TkVP4WRDjD_1lQUfvXzByJfB0/edit?usp=sharing" type="button" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" @click="open = false">View documentation</a>
+                <a href="https://docs.google.com/document/d/18wjxNuPdE9Y2V-VMx-TkVP4WRDjD_1lQUfvXzByJfB0/edit?usp=sharing" target="_blank" type="button" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" @click="open = false">View documentation</a>
               </div>
             </DialogPanel>
           </TransitionChild>
