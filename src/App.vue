@@ -1,5 +1,8 @@
 <template>
-  <div class="bg-white">
+  <div class="bg-white relative">
+    <button v-if="!show" @click="show = true" type="button" class=" fixed rounded-full bg-emerald-600 p-2 text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 z-40 right-10 top-1/2">
+    <PlusIcon class="h-8 w-8" aria-hidden="true" />
+  </button>
     <header class="absolute inset-x-0 top-0 z-50">
       <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div class="flex lg:flex-1">
@@ -109,12 +112,71 @@ into a profit-center.<span class="text-emerald-600 font-bold text-lg"> AIgnment<
       </div>
     </main>
   </div>
+  <!-- Global notification live region, render this permanently at the end of the document -->
+  <div aria-live="assertive" class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6">
+    <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+      <!-- Notification panel, dynamically insert this into the live region when it needs to be displayed -->
+      <transition enter-active-class="transform ease-out duration-300 transition" enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2" enter-to-class="translate-y-0 opacity-100 sm:translate-x-0" leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
+        <div v-if="show" class="pointer-events-auto flex w-full max-w-md divide-x divide-gray-200 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+          <div class="flex w-0 flex-1 items-center p-4">
+            <div class="w-full">
+              <p class="text-sm font-medium text-gray-900">Recording Procedure</p>
+              <p class="mt-1 text-sm text-gray-500">Actions tracked may include mouse movements, key-strokes, and audio.</p>
+            </div>
+          </div>
+          <div class="flex">
+            <div class="flex flex-col divide-y divide-gray-200">
+              <div class="flex h-0 flex-1">
+                <button type="button" @click="show = false ; open = true" class="flex w-full items-center justify-center rounded-none rounded-tr-lg border border-transparent px-4 py-3 text-sm font-medium text-emerald-600 hover:text-emerald-500 focus:z-10 focus:outline-none focus:ring-2 focus:ring-emerald-500">Complete Recording</button>
+              </div>
+              <div class="flex h-0 flex-1">
+                <button type="button" @click="show = false" class="flex w-full items-center justify-center rounded-none rounded-br-lg border border-transparent px-4 py-3 text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
+  </div>
+    <TransitionRoot as="template" :show="open">
+    <Dialog as="div" class="relative z-10" @close="open = false">
+      <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leave-from="opacity-100 translate-y-0 sm:scale-100" leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+            <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+              <div>
+                <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                  <CheckIcon class="h-6 w-6 text-green-600" aria-hidden="true" />
+                </div>
+                <div class="mt-3 text-center sm:mt-5">
+                  <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">Procedure recorded successfully</DialogTitle>
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500">We have recorded actions for your procedure <strong>"audit company website"</strong>.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 sm:mt-6">
+                <a href="https://docs.google.com/document/d/18wjxNuPdE9Y2V-VMx-TkVP4WRDjD_1lQUfvXzByJfB0/edit?usp=sharing" type="button" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" @click="open = false">View documentation</a>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
+
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { Dialog, DialogPanel } from '@headlessui/vue'
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { Bars3Icon, XMarkIcon, CheckIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon } from '@heroicons/vue/20/solid'
+
 
 const navigation = [
   { name: 'Product', href: '#' },
@@ -124,4 +186,6 @@ const navigation = [
 ]
 
 const mobileMenuOpen = ref(false)
+const show = ref(false)
+const open = ref(false)
 </script>
